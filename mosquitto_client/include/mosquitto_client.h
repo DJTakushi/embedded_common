@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include <string>
+#include  <sys/types.h>
 #include <mosquitto.h>
 
 class mosquitto_client {
