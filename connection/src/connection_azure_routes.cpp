@@ -38,7 +38,9 @@ IOTHUBMESSAGE_DISPOSITION_RESULT callback_1(IOTHUB_MESSAGE_HANDLE message,
 };
 
 connection_azure_routes::connection_azure_routes(size_t max_messages)
-    : connection_base(max_messages){}
+    : connection_base(max_messages){
+  initialize();
+}
 
 bool connection_azure_routes::initialize(){
   bool good = true;
@@ -49,7 +51,7 @@ bool connection_azure_routes::initialize(){
       IOTHUB_CLIENT_RESULT cresult;
       cresult = IoTHubModuleClient_LL_SetInputMessageCallback(
                                                         handle,
-                                                        "data_serial_input",
+                                                        "input1",
                                                         callback_1,
                                                         this);
       if (cresult == IOTHUB_CLIENT_OK) {
