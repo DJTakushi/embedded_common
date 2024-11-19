@@ -56,6 +56,7 @@ bool connection_azure_routes::initialize(){
                                                         this);
       if (cresult == IOTHUB_CLIENT_OK) {
         good = true;
+        std::cout << "connection_azure_routes intialized; starting loop..."<<std::endl;
         start_loop();
       }
       else {
@@ -82,6 +83,7 @@ void connection_azure_routes::start_loop(){
       ThreadAPI_Sleep(10);
     }
   });
+  std::cout << "connection_azure_routes::start_loop started..."<<std::endl;
 }
 
 
