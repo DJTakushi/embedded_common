@@ -13,6 +13,7 @@ class connection_base : public connection_i {
  public:
   connection_base(size_t max_messages);
   void stop_loop();
+  bool message_available();
   std::string get_received_message();
   void add_message_to_queue(std::string msg);
 };

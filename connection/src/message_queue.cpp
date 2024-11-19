@@ -22,3 +22,7 @@ void message_queue::add_message_to_queue(std::string msg){
   messages_.push(msg);
   std::cout << "queue size : " << messages_.size()<<std::endl;
 }
+
+size_t message_queue::get_queue_size(){
+  return messages_.size();
+}

@@ -11,10 +11,19 @@ void connection_base::stop_loop(){
   }
 }
 
+bool connection_base::message_available(){
+  return received_queue_->get_queue_size() > 0;
+}
+
+
 std::string connection_base::get_received_message(){
   return received_queue_->get_popped_message();
 };
 
 void connection_base::add_message_to_queue(std::string msg){
-  received_queue_->add_message_to_queue(msg);
+  {
+    std::unique_lock lk(mutex);
+    received_queue_->add_message_to_queue(msg);
+  }
+  cv.notify_one();
 }

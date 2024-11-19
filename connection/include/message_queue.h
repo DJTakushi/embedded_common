@@ -12,4 +12,5 @@ class message_queue {
   message_queue(size_t max_messages);
   std::string get_popped_message();
   void add_message_to_queue(std::string msg);
+  size_t get_queue_size();
 };
