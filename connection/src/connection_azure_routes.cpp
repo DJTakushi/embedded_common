@@ -56,6 +56,7 @@ bool connection_azure_routes::initialize(){
                                                         this);
       if (cresult == IOTHUB_CLIENT_OK) {
         good = true;
+        start_loop();
       }
       else {
         std::cerr << "ERROR: setting callback FAILED!"<<std::endl;
