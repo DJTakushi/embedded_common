@@ -1,4 +1,3 @@
-#include <iostream>
 #include "message_queue.h"
 
 message_queue::message_queue(size_t max_messages) : max_messages_(max_messages){
@@ -20,7 +19,6 @@ void message_queue::add_message_to_queue(std::string msg){
     messages_.pop();
   }
   messages_.push(msg);
-  std::cout << "queue size : " << messages_.size()<<std::endl;
 }
 
 size_t message_queue::get_queue_size(){
