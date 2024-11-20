@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include <string>
+#include <thread>
 #include  <sys/types.h>
 #include <mosquitto.h>
 
@@ -16,6 +17,10 @@ class mosquitto_client {
   uint mqtt_host_keepalive_{60};
 
   void setup_mosquitto();
+  bool is_active_{false};
+  std::thread mosquitto_service_loop_thread_;
+  void mosquitto_service_loop();
+  void service_mqtt();
 
   static void connect_callback(struct mosquitto *mosq,
                                   void *userdata,
@@ -46,5 +51,5 @@ class mosquitto_client {
                 const void* payload,
                 int qos,
                 bool retain);
-  void service_mqtt();
+  void mosquitto_service_loop_start();
 };

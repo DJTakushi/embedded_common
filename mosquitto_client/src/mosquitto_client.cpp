@@ -31,6 +31,7 @@ void mosquitto_client::setup_mosquitto(){
                           mqtt_host_port_,
                           mqtt_host_keepalive_) == 0) {
       std::cout << "mosquitto connection established" <<std::endl;
+      mosquitto_service_loop_start();
     }
     else{
       std::cerr << "Unable to connect."<<std::endl;
@@ -90,4 +91,16 @@ void mosquitto_client::publish(int* mid,
 }
 void mosquitto_client::service_mqtt(){
   mosquitto_loop(mosq_, 0, 1);
+}
+void mosquitto_client::mosquitto_service_loop(){
+  while(is_active_){
+    service_mqtt();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  }
+}
+void mosquitto_client::mosquitto_service_loop_start(){
+  is_active_=true;
+  mosquitto_service_loop_thread_ = std::thread([this](){
+    this->mosquitto_service_loop();
+  });
 }
