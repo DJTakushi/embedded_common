@@ -11,4 +11,5 @@ class connection_azure_routes : public connection_base {
   bool initialize();
   void start_loop();
   void publish(std::string topic, std::string msg);
+  void close();
 };

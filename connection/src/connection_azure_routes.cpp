@@ -42,6 +42,13 @@ connection_azure_routes::connection_azure_routes(size_t max_messages)
   initialize();
 }
 
+void connection_azure_routes::close(){
+  if (handle != NULL) {
+    IoTHubModuleClient_LL_Destroy(handle);
+  }
+  IoTHub_Deinit();
+}
+
 bool connection_azure_routes::initialize(){
   bool good = true;
 

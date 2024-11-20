@@ -61,3 +61,7 @@ void connection_mqtt::start_loop(){
 void connection_mqtt::publish(std::string topic, std::string msg){
   mosquitto_publish(mosq, NULL, topic.c_str(), msg.size(), msg.c_str(), 0, false);
 }
+
+void connection_mqtt::close(){
+  mosquitto_disconnect(mosq);
+}

@@ -13,6 +13,7 @@ class connection_i {
   virtual std::string get_received_message() = 0;
   virtual bool message_available() = 0;
   virtual void publish(std::string topic, std::string msg) = 0;
+  virtual void close() = 0;
   std::mutex mutex;
   std::condition_variable cv;
 };
