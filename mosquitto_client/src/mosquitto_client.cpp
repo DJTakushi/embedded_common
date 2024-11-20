@@ -93,10 +93,12 @@ void mosquitto_client::service_mqtt(){
   mosquitto_loop(mosq_, 0, 1);
 }
 void mosquitto_client::mosquitto_service_loop(){
+  std::cout <<  "mosquitto_client service loop starting..."<<std::endl;
   while(is_active_){
     service_mqtt();
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
+  std::cout << "mosquitto_service_loop exiting..."<<std::endl;
 }
 void mosquitto_client::mosquitto_service_loop_start(){
   is_active_=true;
