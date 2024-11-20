@@ -20,7 +20,6 @@ class mosquitto_client {
   bool is_active_{false};
   std::thread mosquitto_service_loop_thread_;
   void mosquitto_service_loop();
-  void service_mqtt();
 
   static void connect_callback(struct mosquitto *mosq,
                                   void *userdata,
@@ -52,4 +51,5 @@ class mosquitto_client {
                 int qos,
                 bool retain);
   void mosquitto_service_loop_start();
+  void service_mqtt();
 };
