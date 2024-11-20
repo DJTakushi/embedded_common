@@ -9,5 +9,6 @@ set(EMBEDDED_COMMON_VERSION_PATCH "0")
 
 project(${EMBEDDED_COMMON_PROJECT_NAME})
 
+add_subdirectory(common)
 add_subdirectory(connection)
 add_subdirectory(mosquitto_client)
