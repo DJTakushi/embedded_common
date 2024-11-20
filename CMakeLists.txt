@@ -11,4 +11,5 @@ project(${EMBEDDED_COMMON_PROJECT_NAME})
 
 add_subdirectory(common)
 add_subdirectory(connection)
+add_subdirectory(data_module_base)
 add_subdirectory(mosquitto_client)
