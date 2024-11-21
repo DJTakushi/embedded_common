@@ -38,9 +38,7 @@ IOTHUBMESSAGE_DISPOSITION_RESULT callback_1(IOTHUB_MESSAGE_HANDLE message,
 };
 
 connection_azure_routes::connection_azure_routes(size_t max_messages)
-    : connection_base(max_messages){
-  initialize();
-}
+    : connection_base(max_messages){}
 
 void connection_azure_routes::close(){
   if (handle != NULL) {
