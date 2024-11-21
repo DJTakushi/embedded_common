@@ -28,11 +28,3 @@ target_link_libraries(${PROJECT_NAME}
   libuhttp.a
   libmosquitto.so
 )
-
-install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_SYSROOT}/usr/local/lib)
-
-file(GLOB_RECURSE HEADERS
-  ${PROJECT_SOURCE_DIR}/include/*.h
-)
-install(FILES ${HEADERS}
-    DESTINATION ${CMAKE_SYSROOT}/usr/local/include/${PROJECT_NAME})

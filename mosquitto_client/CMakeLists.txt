@@ -11,7 +11,3 @@ target_include_directories(mosquitto_client PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME} libmosquitto.so)
-
-install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_SYSROOT}/usr/local/lib)
-install(FILES include/mosquitto_client.h
-    DESTINATION ${CMAKE_SYSROOT}/usr/local/include/${PROJECT_NAME})
