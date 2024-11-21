@@ -1,3 +1,4 @@
+#pragma once
 #include <mosquitto.h>
 #include <list>
 #include  <sys/types.h>
@@ -40,7 +41,14 @@ class connection_mqtt : public connection_base {
   bool initialize();
   void start_loop();
   void publish(std::string topic, std::string msg);
+  void publish(int* mid,
+                const char* topic,
+                int payloadlen,
+                const void* payload,
+                int qos,
+                bool retain);
   void close();
   void subscriptions_add(std::string sub);
   void set_will_topic(std::string topic);
+  bool is_stable();
 };

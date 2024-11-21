@@ -102,6 +102,14 @@ void connection_mqtt::start_loop(){
 void connection_mqtt::publish(std::string topic, std::string msg){
   mosquitto_publish(mosq_, NULL, topic.c_str(), msg.size(), msg.c_str(), 0, false);
 }
+void connection_mqtt::publish(int* mid,
+                                const char* topic,
+                                int payloadlen,
+                                const void* payload,
+                                int qos,
+                                bool retain){
+  mosquitto_publish(mosq_,mid,topic,payloadlen,payload,qos,retain);
+}
 void connection_mqtt::subscriptions_add(std::string sub){
   subscriptions_.push_back(sub);
 }
@@ -110,4 +118,7 @@ void connection_mqtt::set_will_topic(std::string topic){
 }
 void connection_mqtt::close(){
   mosquitto_disconnect(mosq_);
+}
+bool connection_mqtt::is_stable(){
+  return stable_;
 }
