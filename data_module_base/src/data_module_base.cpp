@@ -4,6 +4,7 @@ data_module_base::data_module_base(connection_type conn_type) :
 
 void data_module_base::setup_local_conn(){
   local_conn_ = connection_factory::create(connection_type_);
+  local_conn_->initialize();
 }
 
 void data_module_base::start_work_loop(){
