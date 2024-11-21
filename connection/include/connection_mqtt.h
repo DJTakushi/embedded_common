@@ -1,5 +1,6 @@
 #include <mosquitto.h>
 #include <list>
+#include  <sys/types.h>
 #include "connection_base.h"
 
 class connection_mqtt : public connection_base {
