@@ -8,6 +8,7 @@ class data_module_base{
   bool is_active_{false};
   std::thread work_loop_thread_;
   virtual void work_loop() = 0;
+  void setup_local_conn();
   void local_publish(std::string topic, std::string data);
 
  public:

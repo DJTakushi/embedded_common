@@ -2,6 +2,10 @@
 data_module_base::data_module_base(connection_type conn_type) :
     connection_type_(conn_type){}
 
+void data_module_base::setup_local_conn(){
+  local_conn_ = connection_factory::create(connection_type_);
+}
+
 void data_module_base::start_work_loop(){
   is_active_=true;
   work_loop_thread_ = std::thread([this](){
