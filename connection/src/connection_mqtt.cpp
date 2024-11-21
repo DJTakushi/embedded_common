@@ -102,7 +102,12 @@ void connection_mqtt::start_loop(){
 void connection_mqtt::publish(std::string topic, std::string msg){
   mosquitto_publish(mosq_, NULL, topic.c_str(), msg.size(), msg.c_str(), 0, false);
 }
-
+void connection_mqtt::subscriptions_add(std::string sub){
+  subscriptions_.push_back(sub);
+}
+void connection_mqtt::set_will_topic(std::string topic){
+  will_topic_ = topic;
+}
 void connection_mqtt::close(){
   mosquitto_disconnect(mosq_);
 }

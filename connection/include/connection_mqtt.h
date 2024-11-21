@@ -41,4 +41,6 @@ class connection_mqtt : public connection_base {
   void start_loop();
   void publish(std::string topic, std::string msg);
   void close();
+  void subscriptions_add(std::string sub);
+  void set_will_topic(std::string topic);
 };
