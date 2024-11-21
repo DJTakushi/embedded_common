@@ -1,18 +1,44 @@
 #include <iostream>
 #include "connection_mqtt.h"
 
-void my_connect_callback(struct mosquitto *mosq, void *userdata, int result) {
+void connection_mqtt::connect_callback(struct mosquitto *mosq,
+                                      void *userdata,
+                                      int result) {
+  connection_mqtt* connection_mqtt_ = (connection_mqtt*)userdata;
   if (!result) {
     // Subscribe to commands
-    mosquitto_subscribe(mosq, NULL, "data_serial_input", 0);
-  } else {
+    for(auto sub : connection_mqtt_->subscriptions_){
+      mosquitto_subscribe(mosq, NULL, sub.c_str(), 0);
+    }
+  }
+  else {
     std::cerr << "MQTT Connect failed" << std::endl;
   }
 }
-
-void my_message_callback(struct mosquitto *mosq,
-                          void *userdata,
-                          const struct mosquitto_message *message) {
+void connection_mqtt::subscribe_callback(struct mosquitto *mosq,
+                              void *userdata,
+                              int mid,
+                              int qos_count,
+                              const int *granted_qos){
+  std::cout << "subscribed (mid: "<< mid << "): "<< granted_qos[0];;
+  for (int i = 1; i < qos_count; i++) {
+    std::cout << ", " << granted_qos[i];
+  }
+  std::cout << std::endl;
+}
+void connection_mqtt::log_callback(struct mosquitto *mosq,
+                                  void *userdata,
+                                  int level,
+                                  const char *str) {
+  // Print all log messages regardless of level.
+  connection_mqtt* connection_mqtt_ = (connection_mqtt*)(userdata);
+  if(connection_mqtt_->log_mosquitto_){
+    std::cout << str <<  std::endl;
+  }
+}
+void connection_mqtt::message_callback(struct mosquitto *mosq,
+                                      void *userdata,
+                                      const struct mosquitto_message *message) {
   std::string payload((char *)(message->payload),message->payloadlen);
   connection_mqtt* connection = (connection_mqtt*)userdata;
   connection->add_message_to_queue(payload);
@@ -21,47 +47,62 @@ void my_message_callback(struct mosquitto *mosq,
 connection_mqtt::connection_mqtt(std::string host,
                                   int port,
                                   size_t max_messages)
-    : connection_base(max_messages), host_(host), port_(port){
+    : connection_base(max_messages), host_(host), host_port_(port){
 }
 
 bool connection_mqtt::initialize(){
-  bool ret = true;
+  bool stable_ = false;
   mosquitto_lib_init();
   bool clean_session = true;
-  mosq = mosquitto_new(NULL, clean_session, this);
-  if (mosq != NULL) {
-    mosquitto_connect_callback_set(mosq, my_connect_callback);
-    mosquitto_message_callback_set(mosq, my_message_callback);
-    mosquitto_username_pw_set(mosq, "admin", "changeme");
+  mosq_ = mosquitto_new(NULL, clean_session, this);
+  if (mosq_ != NULL) {
+    mosquitto_log_callback_set(mosq_, connection_mqtt::log_callback);
+    mosquitto_subscribe_callback_set(mosq_, connection_mqtt::subscribe_callback);
+    mosquitto_connect_callback_set(mosq_, connection_mqtt::connect_callback);
+    mosquitto_message_callback_set(mosq_, connection_mqtt::message_callback);
+    mosquitto_username_pw_set(mosq_, "admin", "changeme");
+    mosquitto_will_set(mosq_, will_topic_.c_str(), 0, NULL, 0, false);
 
-    // MQTT Connect
-    int keepalive = 60;
-    if (mosquitto_connect(mosq, host_.c_str(), port_, keepalive)) {
+    if (mosquitto_connect(mosq_,
+                          host_.c_str(),
+                          host_port_,
+                          host_keep_alive_) == 0) {
+      stable_ = true;
+      std::cout << "mosquitto connection established" <<std::endl;
+      start_loop();
+    }
+    else{
       std::cerr<< "Unable to connect to MQTT."<<std::endl;
-      ret = false;
+      stable_ = false;
     }
   }
   else {
-    std::cerr <<  "Error: Out of memory."<<std::endl;
-    ret = false;
+    std::cerr << "Error creating mosquitto handler"<<std::endl;
+    stable_ = false;
   }
-  return ret;
+  return stable_;
 }
-
+void connection_mqtt::service_mqtt(){
+  mosquitto_loop(mosq_, 0, 1);
+}
+void connection_mqtt::mosquitto_service_loop(){
+  while(is_active_){
+    service_mqtt();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  }
+  std::cout << "mosquitto_service_loop exiting..."<<std::endl;
+}
 void connection_mqtt::start_loop(){
   active_=true;
   do_work_thread_ = std::thread([this](){
-    while(this->active_){
-      mosquitto_loop(mosq, 0, 1);
-      std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    }
+    this->mosquitto_service_loop();
   });
 }
 
 void connection_mqtt::publish(std::string topic, std::string msg){
-  mosquitto_publish(mosq, NULL, topic.c_str(), msg.size(), msg.c_str(), 0, false);
+  mosquitto_publish(mosq_, NULL, topic.c_str(), msg.size(), msg.c_str(), 0, false);
 }
 
 void connection_mqtt::close(){
-  mosquitto_disconnect(mosq);
+  mosquitto_disconnect(mosq_);
 }
