@@ -69,9 +69,10 @@ nlohmann::json data_module_base::create_update_message(){
 }
 
 void data_module_base::publish_data(){
-  // TODO : check if data is worth updating
-  std::string msg =  create_update_message().dump();
-  local_publish(publish_key_, msg);
+  nlohmann::json j = create_update_message();
+  if(j["attributes"].size()> 0){
+    local_publish(publish_key_, j.dump());
+  }
 }
 
 void data_module_base::start_all_threads(){
