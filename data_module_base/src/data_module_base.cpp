@@ -1,7 +1,10 @@
+#include <iostream>
 #include  "data_module_base.h"
-data_module_base::data_module_base(std::string pub_key,
+data_module_base::data_module_base(std::string name,
+                                    std::string pub_key,
                                     connection_type conn_type)
-    : data_module_i(pub_key,conn_type),
+    : data_module_i(name,pub_key,conn_type),
+    name_(name),
     publish_key_(pub_key),
     connection_type_(conn_type){}
 
@@ -28,6 +31,41 @@ void data_module_base::update_data_loop(){
   while(is_active_){
     update_data();
   }
+}
+
+nlohmann::json data_module_base::create_update_message(){
+  steady_tp pub_time = std::chrono::steady_clock::now();
+
+  nlohmann::ordered_json j;
+  j["name"]=name_;
+  for(auto attr : attribute_host_.get_updated_attributes()){
+    nlohmann::json j_attr;
+    j_attr["name"] = attr->get_name();
+    j_attr["datatype"] = attr->get_datatype();
+    j_attr["timestamp"] = attr->reported_epoch_get();
+
+    size_t attr_size;
+    uint64_t tahu_datatype;
+
+    switch (attr->get_datatype()){
+      case kInteger:
+        j_attr["value"] = *((uint64_t*)(attr->get_value()));
+        break;
+      case kDouble:
+        j_attr["value"] = *((double*)(attr->get_value()));
+        break;
+      case kString:
+        j_attr["value"] = *((std::string*)(attr->get_value()));
+        break;
+      default:
+        std::cout << "unknown attribute type!" << std::endl;
+        break;
+    }
+    attr->update_time_published(pub_time);
+    j["attributes"].emplace_back(j_attr);
+  }
+
+  return j;
 }
 
 void data_module_base::publish_data(){

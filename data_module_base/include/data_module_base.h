@@ -4,6 +4,7 @@
 
 class data_module_base : public data_module_i{
  protected:
+  std::string name_;
   std::string publish_key_;
   attribute_host attribute_host_;
   connection_type connection_type_;
@@ -20,6 +21,7 @@ class data_module_base : public data_module_i{
   void update_data_loop();
   virtual void update_data() = 0;
 
+  nlohmann::json create_update_message();
   void publish_data();
   std::string generate_update_message();
 
@@ -27,7 +29,7 @@ class data_module_base : public data_module_i{
   void local_publish(std::string topic, std::string data);
 
  public:
-  data_module_base(std::string pub_key, connection_type conn_type);
+  data_module_base(std::string name, std::string pub_key, connection_type conn_type);
   virtual void setup() = 0;
   void start_all_threads();
   void stop_all_threads();
