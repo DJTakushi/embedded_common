@@ -11,6 +11,8 @@ class data_module_base{
   std::thread receive_data_thread_;
   void receive_data_loop();
   virtual void receive_data() = 0;
+  std::mutex receive_data_mutex_;
+  std::condition_variable receive_data_cv_;
 
   std::thread update_data_thread_; // update attributes & publish
   void update_data_loop();
