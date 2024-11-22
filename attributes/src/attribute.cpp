@@ -1,15 +1,16 @@
 #include <sys/types.h>
-#include "tahu.h"
 #include "attribute.h"
-attribute::attribute(uint64_t datatype) : datatype_(datatype) {
+attribute::attribute(std::string name, uint64_t datatype)
+                                  : name_(name),
+                                    datatype_(datatype) {
   switch (datatype_){
-    case METRIC_DATA_TYPE_INT64:
+    case kInteger:
       value_ = (void*)(new uint64_t);
       break;
-    case METRIC_DATA_TYPE_DOUBLE:
+    case kDouble:
       value_ = (void*)(new double);
       break;
-    case METRIC_DATA_TYPE_STRING:
+    case kString:
       value_ = (void*)(new std::string);
       break;
 
@@ -19,19 +20,19 @@ void attribute::set_value_with_timetamp(nlohmann::json& j_val,
                                               steady_tp time){
   void* data = NULL;
   switch (datatype_){
-    case METRIC_DATA_TYPE_INT64:
+    case kInteger:
       if (j_val.is_number_integer()){
         *((uint64_t*)(value_)) = j_val;
         time_recv_ = time;
       }
       break;
-    case METRIC_DATA_TYPE_DOUBLE:
+    case kDouble:
       if (j_val.is_number_float()){
         *((double*)(value_)) = j_val;
         time_recv_ = time;
       }
       break;
-    case METRIC_DATA_TYPE_STRING:
+    case kString:
       if (j_val.is_string()){
         *((std::string*)(value_)) = j_val;
         time_recv_ = time;
@@ -55,4 +56,8 @@ uint64_t attribute::reported_epoch_get(){
 
 void attribute::reported_epoch_set(uint64_t epoch){
   reported_epoch_ = epoch;
+}
+
+std::string attribute::get_name(){
+  return name_;
 }
