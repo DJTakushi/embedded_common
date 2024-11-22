@@ -23,7 +23,6 @@ class data_module_base : public data_module_i{
 
   nlohmann::json create_update_message();
   void publish_data();
-  std::string generate_update_message();
 
   void setup_local_conn();
   void local_publish(std::string topic, std::string data);

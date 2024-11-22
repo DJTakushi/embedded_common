@@ -70,14 +70,8 @@ nlohmann::json data_module_base::create_update_message(){
 
 void data_module_base::publish_data(){
   // TODO : check if data is worth updating
-  std::string msg =  generate_update_message();
+  std::string msg =  create_update_message().dump();
   local_publish(publish_key_, msg);
-}
-
-std::string data_module_base::generate_update_message(){
-  std::string out;
-  // TODO
-  return out;
 }
 
 void data_module_base::start_all_threads(){
