@@ -7,8 +7,6 @@ class data_module_base{
   connection_type connection_type_;
   std::shared_ptr<connection_i> local_conn_;
   bool is_active_{false};
-  std::thread work_loop_thread_;
-  virtual void work_loop() = 0;
 
   std::thread receive_data_thread_;
   void receive_data_loop();
@@ -27,7 +25,8 @@ class data_module_base{
  public:
   data_module_base(std::string pub_key, connection_type conn_type);
   virtual void setup() = 0;
-  void start_work_loop();
+  void start_all_threads();
+  void stop_all_threads();
   virtual void close() = 0;
 
   bool is_active();

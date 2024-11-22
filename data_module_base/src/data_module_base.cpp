@@ -8,12 +8,6 @@ void data_module_base::setup_local_conn(){
   local_conn_->initialize();
 }
 
-void data_module_base::start_work_loop(){
-  is_active_=true;
-  work_loop_thread_ = std::thread([this](){
-    this->work_loop();
-  });
-}
 void data_module_base::local_publish(std::string topic, std::string data){
   local_conn_->publish(topic,data);
 }
@@ -44,4 +38,25 @@ std::string data_module_base::generate_update_message(){
   std::string out;
   // TODO
   return out;
+}
+
+void data_module_base::start_all_threads(){
+  is_active_=true;
+  receive_data_thread_ = std::thread([this](){
+    this->receive_data_loop();
+  });
+
+  update_data_thread_ = std::thread([this](){
+    this->update_data_loop();
+  });
+}
+
+void data_module_base::stop_all_threads(){
+  is_active_  =  false;
+  if(receive_data_thread_.joinable()){
+    receive_data_thread_.join();
+  }
+  if(update_data_thread_.joinable()){
+    update_data_thread_.join();
+  }
 }
