@@ -1,9 +1,11 @@
 #pragma once
-#include "connection_factory.h"
+#include "data_module_i.h"
+#include "attribute_host.h"
 
-class data_module_base{
+class data_module_base : public data_module_i{
  protected:
   std::string publish_key_;
+  attribute_host attribute_host_;
   connection_type connection_type_;
   std::shared_ptr<connection_i> local_conn_;
   bool is_active_{false};

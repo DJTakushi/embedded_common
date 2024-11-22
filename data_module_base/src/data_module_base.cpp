@@ -1,5 +1,7 @@
 #include  "data_module_base.h"
-data_module_base::data_module_base(std::string pub_key, connection_type conn_type) :
+data_module_base::data_module_base(std::string pub_key,
+                                    connection_type conn_type)
+    : data_module_i(pub_key,conn_type),
     publish_key_(pub_key),
     connection_type_(conn_type){}
 
