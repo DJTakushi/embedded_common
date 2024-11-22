@@ -48,7 +48,7 @@ uint64_t attribute::get_datatype(){
   return datatype_;
 }
 bool attribute::is_recently_published(){
-  return time_sent_ < time_recv_;
+  return time_published_ < time_recv_;
 }
 uint64_t attribute::reported_epoch_get(){
   return reported_epoch_;
@@ -60,4 +60,7 @@ void attribute::reported_epoch_set(uint64_t epoch){
 
 std::string attribute::get_name(){
   return name_;
+}
+void attribute::update_time_published(steady_tp time){
+  time_published_ = time;
 }
