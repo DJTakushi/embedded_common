@@ -12,7 +12,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
   "include"
   "../connection/include"
   "../attributes/include"
-)
+  "../parser/include"
+  )
 
 
 target_link_libraries(${PROJECT_NAME}

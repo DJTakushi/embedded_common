@@ -1,5 +1,6 @@
 #pragma once
 #include "data_module_i.h"
+#include "parser_i.h"
 #include "attribute_host.h"
 
 class data_module_base : public data_module_i{
@@ -21,6 +22,7 @@ class data_module_base : public data_module_i{
   void update_data_loop();
   virtual void update_data() = 0;
 
+  std::shared_ptr<parser_i> parser_;
   nlohmann::json create_update_message();
   void publish_data();
 
