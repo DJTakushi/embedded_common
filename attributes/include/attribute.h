@@ -2,13 +2,9 @@
 #include <chrono>
 #include <stdint.h>
 #include <nlohmann/json.hpp>
-
+#include "attribute_datatype_enum.h"
 typedef std::chrono::steady_clock::time_point steady_tp;
-enum Datatype {
-  kInteger = 4, // tahu.h : METRIC_DATA_TYPE_INT64
-  kDouble = 10, // tahu.h : METRIC_DATA_TYPE_DOUBLE
-  kString = 12 // tahu.h : METRIC_DATA_TYPE_STRING
-};
+
 class attribute{
   const void* value_;
   uint64_t datatype_;

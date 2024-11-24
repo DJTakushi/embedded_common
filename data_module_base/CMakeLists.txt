@@ -10,6 +10,7 @@ add_library(${PROJECT_NAME} ${SOURCE})
 
 target_include_directories(${PROJECT_NAME} PRIVATE
   "include"
+  "../common/include"
   "../connection/include"
   "../attributes/include"
   "../parser/include"
