@@ -26,7 +26,8 @@ void attribute_host::update_attribute(nlohmann::json& j, steady_tp time){
       }
     }
     else{
-      std::cout << "missing 'value' and/or 'timestamp'" << std::endl;
+      // don't print : may be seeding data to attribute host
+      // std::cout << "missing 'value' and/or 'timestamp'" << std::endl;
     }
   }
   else{
