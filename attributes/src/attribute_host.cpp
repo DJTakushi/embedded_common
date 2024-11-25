@@ -5,6 +5,8 @@ attribute_host::attribute_host(){
 }
 
 void attribute_host::update_attribute(nlohmann::json& j, steady_tp time){
+  std::cout << "update_attribute attr : " << j.dump() <<  std::endl;
+
   if(j.contains("name") && j.contains("datatype")){
     std::string attr_name = j["name"];
     uint64_t attr_datatype = j["datatype"];
