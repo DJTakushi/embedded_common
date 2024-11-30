@@ -3,6 +3,9 @@
 #include "connection_azure_routes.h"
 #include "connection_mqtt.h"
 
+#define AZURE_ROUTES "AZURE_ROUTES"
+#define MQTT "MQTT"
+
 enum connection_type {
   kAzureIot,
   kMqtt
