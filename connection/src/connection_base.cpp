@@ -27,3 +27,6 @@ void connection_base::add_message_to_queue(std::string msg){
   }
   cv.notify_one();
 }
+void connection_base::subscriptions_add(std::string sub){
+  subscriptions_.push_back(sub);
+}

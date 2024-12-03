@@ -14,6 +14,8 @@ class connection_i {
   virtual bool message_available() = 0;
   virtual void publish(std::string topic, std::string msg) = 0;
   virtual void close() = 0;
+  virtual void subscriptions_add(std::string sub) = 0;
+
   std::mutex mutex;
   std::condition_variable cv;
 };
