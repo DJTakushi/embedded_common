@@ -6,10 +6,11 @@ data_module_base::data_module_base(std::string name,
     : data_module_i(name,pub_key,conn_type),
     name_(name),
     publish_key_(pub_key),
-    connection_type_(conn_type){}
+    connection_type_(conn_type){
+  local_conn_ = connection_factory::create(connection_type_);
+}
 
 void data_module_base::setup_local_conn(){
-  local_conn_ = connection_factory::create(connection_type_);
   local_conn_->initialize();
 }
 
