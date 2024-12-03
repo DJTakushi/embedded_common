@@ -86,7 +86,7 @@ void connection_mqtt::service_mqtt(){
   mosquitto_loop(mosq_, 0, 1);
 }
 void connection_mqtt::mosquitto_service_loop(){
-  while(is_active_){
+  while(active_){
     service_mqtt();
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
