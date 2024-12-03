@@ -110,9 +110,6 @@ void connection_mqtt::publish(int* mid,
                                 bool retain){
   mosquitto_publish(mosq_,mid,topic,payloadlen,payload,qos,retain);
 }
-void connection_mqtt::subscriptions_add(std::string sub){
-  subscriptions_.push_back(sub);
-}
 void connection_mqtt::set_will_topic(std::string topic){
   will_topic_ = topic;
 }
