@@ -10,6 +10,13 @@ sudo apt-get install -y mosquitto-dev=2.0.20* # TODO: get library, but don't run
 mkdir -p third_party
 
 cd third_party
+sudo apt-get install -y xsltproc docbook-xsl
+git clone  git clone git@github.com:eclipse-mosquitto/mosquitto.git --branch v2.0.20
+cd mosquitto
+mkdir -p build && cd build
+sudo cmake .. && sudo make install
+cd ../..
+
 wget https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.bz2
 tar --bzip2 -xf boost_1_84_0.tar.bz2
 sudo cp -r boost_1_84_0/boost /usr/include/
