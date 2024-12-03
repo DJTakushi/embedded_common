@@ -1,15 +1,12 @@
 #pragma once
 #include <mosquitto.h>
-#include <list>
-#include  <sys/types.h>
+#include <sys/types.h>
 #include "connection_base.h"
 
 class connection_mqtt : public connection_base {
   bool stable_{true}; // will be flagged false if problems detected
-  bool log_mosquitto_{false};// TODO: set in constructor
-  std::list<std::string> subscriptions_;
+  bool log_mosquitto_{true};// TODO: set in constructor
   std::string will_topic_;
-
 
   struct mosquitto* mosq_;
   std::string host_{"localhost"};
@@ -47,7 +44,6 @@ class connection_mqtt : public connection_base {
                 int qos,
                 bool retain);
   void close();
-  void subscriptions_add(std::string sub);
   void set_will_topic(std::string topic);
   bool is_stable();
 };
