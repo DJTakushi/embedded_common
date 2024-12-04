@@ -5,7 +5,7 @@
 
 class connection_mqtt : public connection_base {
   bool stable_{true}; // will be flagged false if problems detected
-  bool log_mosquitto_{true};// TODO: set in constructor
+  bool log_mosquitto_{false};// TODO: set in constructor
   std::string will_topic_;
 
   struct mosquitto* mosq_;
