@@ -32,3 +32,13 @@ git submodule init && git submodule update
 cmake -Duse_edge_modules=ON ..
 sudo make install
 cd ../../../
+
+# NOTE : this installation is not identical to dockerfile
+cd third_party
+git clone https://github.com/eclipse/tahu.git --branch v1.0.11
+cd tahu/c/core
+sed -i "s|#define SPARKPLUG_DEBUG 1|//#define SPARKPLUG_DEBUG 1 |g"
+    \ include/tahu.h
+make
+sudo cp include/* /usr/include/
+sudo cp lib/libtahu.a /usr/lib/
