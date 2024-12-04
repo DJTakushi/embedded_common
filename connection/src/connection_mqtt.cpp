@@ -61,7 +61,9 @@ bool connection_mqtt::initialize(){
     mosquitto_connect_callback_set(mosq_, connection_mqtt::connect_callback);
     mosquitto_message_callback_set(mosq_, connection_mqtt::message_callback);
     mosquitto_username_pw_set(mosq_, "admin", "changeme");
-    mosquitto_will_set(mosq_, will_topic_.c_str(), 0, NULL, 0, false);
+    if(will_topic_.size()>0){
+      mosquitto_will_set(mosq_, will_topic_.c_str(), 0, NULL, 0, false);
+    }
 
     if (mosquitto_connect(mosq_,
                           host_.c_str(),
