@@ -37,3 +37,13 @@ uint argument_helper::get_port(int argc, char* argv[]){
   }
   return port;
 }
+std::string argument_helper::get_spb_address(int argc, char* argv[]){
+  std::string spb_address = "localhost";
+  for(size_t i = 1; i < argc; i++){
+      std::string str(argv[i]);
+    if (str.substr(0,5)=="-spba"){
+      spb_address = str.substr(5,str.npos);
+    }
+  }
+  return spb_address;
+}
