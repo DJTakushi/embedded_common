@@ -1,3 +1,4 @@
+#pragma once
 #include <memory>
 
 #include "connection_azure_routes.h"

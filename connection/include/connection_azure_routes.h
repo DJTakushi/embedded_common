@@ -1,3 +1,4 @@
+#pragma once
 #define USE_EDGE_MODULES
 #include "azureiot/iothub_module_client_ll.h"
 #include "azureiot/iothubtransportmqtt.h"
