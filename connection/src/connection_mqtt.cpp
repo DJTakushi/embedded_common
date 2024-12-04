@@ -65,6 +65,7 @@ bool connection_mqtt::initialize(){
       mosquitto_will_set(mosq_, will_topic_.c_str(), 0, NULL, 0, false);
     }
 
+    std::cout << "connecting to host " << host_ << " ; port " << host_port_ << std::endl;
     if (mosquitto_connect(mosq_,
                           host_.c_str(),
                           host_port_,

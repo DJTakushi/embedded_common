@@ -13,5 +13,7 @@ enum connection_type {
 
 class connection_factory {
  public:
-  static std::shared_ptr<connection_i> create(connection_type type);
+  static std::shared_ptr<connection_i> create(connection_type type,
+                                              std::string address,
+                                              uint port);
 };

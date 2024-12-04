@@ -30,7 +30,11 @@ class data_module_base : public data_module_i{
   void local_publish(std::string topic, std::string data);
 
  public:
-  data_module_base(std::string name, std::string pub_key, connection_type conn_type);
+  data_module_base(std::string name,
+                    std::string pub_key,
+                    connection_type conn_type,
+                    std::string address,
+                    uint port);
   virtual void setup() = 0;
   void start_all_threads();
   void stop_all_threads();
