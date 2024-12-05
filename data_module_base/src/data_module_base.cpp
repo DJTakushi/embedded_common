@@ -3,14 +3,16 @@
 namespace ec{
 data_module_base::data_module_base(std::string name,
                                     std::string pub_key,
+                                    std::string sub_key,
                                     connection_type conn_type,
                                     std::string address,
                                     uint port)
-    : data_module_i(name,pub_key,conn_type,address,port),
+    : data_module_i(),
     name_(name),
     publish_key_(pub_key),
     connection_type_(conn_type){
   local_conn_ = connection_factory::create(connection_type_,address,port);
+  local_conn_->subscriptions_add(sub_key);
 }
 
 void data_module_base::setup_local_conn(){

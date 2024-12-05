@@ -34,6 +34,7 @@ class data_module_base : public data_module_i{
  public:
   data_module_base(std::string name,
                     std::string pub_key,
+                    std::string sub_key,
                     connection_type conn_type,
                     std::string address,
                     uint port);
