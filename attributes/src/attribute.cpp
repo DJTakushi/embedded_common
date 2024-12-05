@@ -13,9 +13,8 @@ attribute::attribute(std::string name, uint64_t datatype)
     case kString:
       value_ = (void*)(new std::string);
       break;
-
-
-  }}
+  }
+}
 void attribute::set_value_with_timetamp(nlohmann::json& j_val,
                                               steady_tp time){
   void* data = NULL;
