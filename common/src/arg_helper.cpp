@@ -1,7 +1,7 @@
 #include <iostream>
-#include "argument_helper.h"
+#include "arg_helper.h"
 namespace ec{
-connection_type argument_helper::get_connection_type(int argc, char* argv[]){
+connection_type arg_helper::get_connection_type(int argc, char* argv[]){
   connection_type type = kMqtt;
   for(size_t i = 1; i < argc; i++) {
     std::string str(argv[i]);
@@ -18,7 +18,7 @@ connection_type argument_helper::get_connection_type(int argc, char* argv[]){
   }
   return type;
 };
-std::string argument_helper::get_address(int argc, char* argv[]){
+std::string arg_helper::get_address(int argc, char* argv[]){
   std::string address = "localhost";
   for(size_t i = 1; i < argc; i++){
       std::string str(argv[i]);
@@ -28,7 +28,7 @@ std::string argument_helper::get_address(int argc, char* argv[]){
   }
   return address;
 }
-uint argument_helper::get_port(int argc, char* argv[]){
+uint arg_helper::get_port(int argc, char* argv[]){
   uint port = 1883;
   for(size_t i = 1; i < argc; i++){
       std::string str(argv[i]);
@@ -38,7 +38,7 @@ uint argument_helper::get_port(int argc, char* argv[]){
   }
   return port;
 }
-std::string argument_helper::get_spb_address(int argc, char* argv[]){
+std::string arg_helper::get_spb_address(int argc, char* argv[]){
   std::string spb_address = "localhost";
   for(size_t i = 1; i < argc; i++){
       std::string str(argv[i]);
