@@ -17,7 +17,6 @@ attribute::attribute(std::string name, uint64_t datatype)
 }
 void attribute::set_value_with_timetamp(nlohmann::json& j_val,
                                               steady_tp time){
-  void* data = NULL;
   switch (datatype_){
     case kInteger:
       if (j_val.is_number_integer()){
