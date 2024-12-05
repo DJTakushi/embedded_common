@@ -53,12 +53,18 @@ bool connection_azure_routes::initialize(){
   if (IoTHub_Init() == 0) {
     handle = IoTHubModuleClient_LL_CreateFromEnvironment(MQTT_Protocol);
     if (handle != NULL){
-      IOTHUB_CLIENT_RESULT cresult;
-      cresult = IoTHubModuleClient_LL_SetInputMessageCallback(
-                                                        handle,
-                                                        "input1",
-                                                        callback_1,
-                                                        this);
+      IOTHUB_CLIENT_RESULT cresult = IOTHUB_CLIENT_OK;
+      for(auto sub : subscriptions_){ // subscibe to all with same callback
+        IOTHUB_CLIENT_RESULT tmp_result;
+        tmp_result = IoTHubModuleClient_LL_SetInputMessageCallback(
+                                                          handle,
+                                                          sub.c_str(),
+                                                          callback_1,
+                                                          this);
+        if(tmp_result != IOTHUB_CLIENT_OK){
+          tmp_result = IOTHUB_CLIENT_OK;
+        }
+      }
       if (cresult == IOTHUB_CLIENT_OK) {
         good = true;
         std::cout << "connection_azure_routes intialized; starting loop..."<<std::endl;
