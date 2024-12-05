@@ -13,7 +13,7 @@ class data_module_base : public data_module_i{
   std::shared_ptr<connection_i> local_conn_;
   bool is_active_{false};
 
-  std::queue<std::shared_ptr<void*>> received_data_;
+  std::queue<std::shared_ptr<void*>> received_data_; // void for cast-ability
   std::thread receive_data_thread_;
   void receive_data_loop();
   virtual void receive_data() = 0;
