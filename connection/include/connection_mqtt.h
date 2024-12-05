@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include "connection_base.h"
 
+namespace ec{
 class connection_mqtt : public connection_base {
   bool stable_{true}; // will be flagged false if problems detected
   bool log_mosquitto_{false};// TODO: set in constructor
@@ -47,3 +48,4 @@ class connection_mqtt : public connection_base {
   void set_will_topic(std::string topic);
   bool is_stable();
 };
+}//ec

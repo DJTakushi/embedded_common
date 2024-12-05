@@ -4,6 +4,7 @@
 #include "azure_c_shared_utility/threadapi.h"
 
 
+namespace ec{
 IOTHUBMESSAGE_DISPOSITION_RESULT callback_1(IOTHUB_MESSAGE_HANDLE message,
                                             void* userContextCallback){
   connection_azure_routes* connection;
@@ -140,3 +141,4 @@ void connection_azure_routes::publish(std::string topic, std::string msg){
     std::cerr<<"ERROR: iotHubMessageHandle is NULL!"<<std::endl;
   }
 }
+}//ec

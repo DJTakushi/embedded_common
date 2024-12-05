@@ -1,6 +1,7 @@
 #include <iostream>
 #include "message_queue.h"
 
+namespace ec{
 message_queue::message_queue(size_t max_messages) : max_messages_(max_messages){
 }
 
@@ -26,3 +27,4 @@ void message_queue::add_message_to_queue(std::string msg){
 size_t message_queue::get_queue_size(){
   return messages_.size();
 }
+}//ec

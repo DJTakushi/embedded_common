@@ -1,5 +1,6 @@
 #include "connection_factory.h"
 
+namespace ec{
 class argument_helper{
  public:
   static connection_type get_connection_type(int argc, char* argv[]);
@@ -7,3 +8,4 @@ class argument_helper{
   static uint get_port(int argc, char* argv[]);
   static std::string get_spb_address(int argc, char* argv[]);
 };
+}//ec

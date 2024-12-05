@@ -1,5 +1,6 @@
 #pragma once
 #include "nlohmann/json.hpp"
+namespace ec{
 class parser_i{
  public:
   virtual void configure(nlohmann::json config) = 0;
@@ -12,3 +13,4 @@ class parser_i{
 
   virtual nlohmann::json get_config() = 0;
 };
+}//ec

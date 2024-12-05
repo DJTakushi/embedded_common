@@ -2,6 +2,7 @@
 #include <string>
 #include "connection_factory.h"
 
+namespace ec{
 class data_module_i{
  public:
   data_module_i(std::string name,
@@ -15,3 +16,4 @@ class data_module_i{
   virtual void close() = 0;
   virtual bool is_active() = 0;
 };
+}//ec

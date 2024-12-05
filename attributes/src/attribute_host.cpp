@@ -1,5 +1,6 @@
 #include <iostream>
 #include "attribute_host.h"
+namespace ec{
 attribute_host::attribute_host(){
   // TODO :
 }
@@ -55,3 +56,4 @@ attribute_vector attribute_host::get_updated_attributes(){
   }
   return out;
 }
+}//ec

@@ -1,5 +1,6 @@
 #include <iostream>
 #include  "data_module_base.h"
+namespace ec{
 data_module_base::data_module_base(std::string name,
                                     std::string pub_key,
                                     connection_type conn_type,
@@ -98,3 +99,4 @@ void data_module_base::stop_all_threads(){
     update_data_thread_.join();
   }
 }
+}//ec

@@ -5,8 +5,10 @@
 typedef std::chrono::system_clock::time_point sys_tp;
 typedef std::chrono::milliseconds ms;
 
+namespace ec{
 class time_helper{
  public:
   static std::string time_rfc_3339();
   static uint64_t get_epoch_now();
 };
+}//ec

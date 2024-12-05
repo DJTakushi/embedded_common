@@ -1,6 +1,7 @@
 #include <iostream>
 #include "connection_mqtt.h"
 
+namespace ec{
 void connection_mqtt::connect_callback(struct mosquitto *mosq,
                                       void *userdata,
                                       int result) {
@@ -122,3 +123,4 @@ void connection_mqtt::close(){
 bool connection_mqtt::is_stable(){
   return stable_;
 }
+}//ec

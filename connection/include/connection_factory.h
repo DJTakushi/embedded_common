@@ -7,6 +7,7 @@
 #define AZURE_ROUTES "AZURE_ROUTES"
 #define MQTT "MQTT"
 
+namespace ec{
 enum connection_type {
   kAzureIot,
   kMqtt
@@ -18,3 +19,4 @@ class connection_factory {
                                               std::string address,
                                               uint port);
 };
+}//ec

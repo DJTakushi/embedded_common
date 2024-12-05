@@ -1,5 +1,6 @@
 #include <iostream>
 #include "argument_helper.h"
+namespace ec{
 connection_type argument_helper::get_connection_type(int argc, char* argv[]){
   connection_type type = kMqtt;
   for(size_t i = 1; i < argc; i++) {
@@ -47,3 +48,4 @@ std::string argument_helper::get_spb_address(int argc, char* argv[]){
   }
   return spb_address;
 }
+}//ec

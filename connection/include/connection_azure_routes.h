@@ -4,6 +4,7 @@
 #include "azureiot/iothubtransportmqtt.h"
 #include "connection_base.h"
 
+namespace ec{
 class connection_azure_routes : public connection_base {
  private:
   IOTHUB_MODULE_CLIENT_LL_HANDLE handle;
@@ -14,3 +15,4 @@ class connection_azure_routes : public connection_base {
   void publish(std::string topic, std::string msg);
   void close();
 };
+}//ec

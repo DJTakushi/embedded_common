@@ -3,6 +3,7 @@
 #include "parser_i.h"
 #include "attribute_host.h"
 
+namespace ec{
 class data_module_base : public data_module_i{
  protected:
   std::string name_;
@@ -42,3 +43,4 @@ class data_module_base : public data_module_i{
 
   bool is_active();
 };
+}//ec

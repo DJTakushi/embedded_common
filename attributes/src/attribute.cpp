@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include "attribute.h"
+namespace ec{
 attribute::attribute(std::string name, uint64_t datatype)
                                   : name_(name),
                                     datatype_(datatype) {
@@ -62,3 +63,4 @@ std::string attribute::get_name(){
 void attribute::update_time_published(steady_tp time){
   time_published_ = time;
 }
+}//ec

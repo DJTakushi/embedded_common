@@ -5,6 +5,7 @@
 #include "attribute_datatype_enum.h"
 typedef std::chrono::steady_clock::time_point steady_tp;
 
+namespace ec{
 class attribute{
   const void* value_;
   uint64_t datatype_;
@@ -23,3 +24,4 @@ class attribute{
   void update_time_published(steady_tp time);
   std::string get_name();
 };
+}//ec

@@ -6,6 +6,7 @@
 #include "connection_i.h"
 #include "message_queue.h"
 
+namespace ec{
 class connection_base : public connection_i {
  protected:
   std::shared_ptr<message_queue> received_queue_;
@@ -20,3 +21,4 @@ class connection_base : public connection_i {
   void add_message_to_queue(std::string msg);
   void subscriptions_add(std::string sub);
 };
+}//ec

@@ -1,5 +1,6 @@
 #include "connection_base.h"
 
+namespace ec{
 connection_base::connection_base(size_t max_messages){
   received_queue_ = std::make_shared<message_queue>(max_messages);
 }
@@ -30,3 +31,4 @@ void connection_base::add_message_to_queue(std::string msg){
 void connection_base::subscriptions_add(std::string sub){
   subscriptions_.push_back(sub);
 }
+}//ec

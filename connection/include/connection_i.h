@@ -3,6 +3,7 @@
 #include <functional>
 #include <string>
 
+namespace ec{
 typedef std::function<void(std::string, void*)> message_callback;
 
 class connection_i {
@@ -19,3 +20,4 @@ class connection_i {
   std::mutex mutex;
   std::condition_variable cv;
 };
+}//ec

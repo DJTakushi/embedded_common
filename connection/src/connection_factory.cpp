@@ -1,6 +1,7 @@
 #include <iostream>
 #include "connection_factory.h"
 
+namespace ec{
 std::shared_ptr<connection_i> connection_factory::create(connection_type type,
                                                           std::string host,
                                                           uint port) {
@@ -17,3 +18,4 @@ std::shared_ptr<connection_i> connection_factory::create(connection_type type,
   }
   return out;
 }
+}//ec

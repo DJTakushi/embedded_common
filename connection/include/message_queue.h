@@ -4,6 +4,7 @@
 #include <queue>
 #include <string>
 
+namespace ec{
 class message_queue {
   std::queue<std::string> messages_;
   std::mutex message_mutex;
@@ -14,3 +15,4 @@ class message_queue {
   void add_message_to_queue(std::string msg);
   size_t get_queue_size();
 };
+}//ec
