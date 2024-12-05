@@ -13,6 +13,8 @@ class data_module_base : public data_module_i{
   std::shared_ptr<connection_i> local_conn_;
   bool is_active_{false};
 
+  virtual void config_from_json(nlohmann::json j) = 0;
+
   std::queue<std::shared_ptr<void*>> received_data_; // void for cast-ability
   std::thread receive_data_thread_;
   void receive_data_loop();
