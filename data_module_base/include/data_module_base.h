@@ -10,7 +10,8 @@ enum data_module_status{
   kConfiguring,
   kRunning,
   kExiting,
-  kExited
+  kExited,
+  kConfigBad
 };
 class data_module_base : public data_module_i{
  protected:
@@ -20,7 +21,6 @@ class data_module_base : public data_module_i{
   std::string name_;
   std::string publish_key_;
   attribute_host attribute_host_;
-  connection_type connection_type_;
   std::shared_ptr<connection_i> local_conn_;
 
   void config_from_json(nlohmann::json j);
@@ -46,12 +46,7 @@ class data_module_base : public data_module_i{
   void start_all_threads();
   void stop_all_threads();
  public:
-  data_module_base(std::string name,
-                    std::string pub_key,
-                    std::string sub_key,
-                    connection_type conn_type,
-                    std::string address,
-                    uint port);
+  data_module_base(nlohmann::json config);
   virtual void setup() = 0;
   void start_running();
   virtual void exit() = 0;
