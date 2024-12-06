@@ -14,7 +14,7 @@ enum data_module_status{
 };
 class data_module_base : public data_module_i{
  protected:
-  data_module_status status_{kUninitialized};
+  data_module_status state_{kUninitialized};
   bool is_running();
 
   std::string name_;

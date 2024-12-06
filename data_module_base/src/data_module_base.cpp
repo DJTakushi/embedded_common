@@ -23,7 +23,7 @@ void data_module_base::config_from_json(nlohmann::json j){
 }
 
 bool data_module_base::is_running(){
-  return status_ == kRunning;
+  return state_ == kRunning;
 }
 void data_module_base::setup_local_conn(){
   local_conn_->initialize();
@@ -34,7 +34,7 @@ void data_module_base::local_publish(std::string topic, std::string data){
 }
 
 bool data_module_base::is_exited(){
-  return status_ == kExited;
+  return state_ == kExited;
 }
 
 void data_module_base::receive_data_loop(){
@@ -91,7 +91,7 @@ void data_module_base::publish_data(){
   }
 }
 void data_module_base::start_running(){
-  status_ = kRunning;
+  state_ = kRunning;
   start_all_threads();
 }
 void data_module_base::start_all_threads(){
