@@ -16,12 +16,15 @@ data_module_base::data_module_base(std::string name,
 }
 void data_module_base::config_from_json(nlohmann::json j){
   // load name
+
   // load publish key
   // load sub key
   // load connection type 
 }
 
-
+bool data_module_base::is_running(){
+  return status_ == kRunning;
+}
 void data_module_base::setup_local_conn(){
   local_conn_->initialize();
 }
@@ -30,18 +33,18 @@ void data_module_base::local_publish(std::string topic, std::string data){
   local_conn_->publish(topic,data);
 }
 
-bool data_module_base::is_active(){
-  return is_active_;
+bool data_module_base::is_exited(){
+  return status_ == kExited;
 }
 
 void data_module_base::receive_data_loop(){
-  while(is_active_){
+  while(is_running()){
     receive_data();
   }
 }
 
 void data_module_base::update_data_loop(){
-  while(is_active_){
+  while(is_running()){
     update_data();
   }
 }
@@ -87,9 +90,11 @@ void data_module_base::publish_data(){
     local_publish(publish_key_, j.dump());
   }
 }
-
+void data_module_base::start_running(){
+  status_ = kRunning;
+  start_all_threads();
+}
 void data_module_base::start_all_threads(){
-  is_active_=true;
   receive_data_thread_ = std::thread([this](){
     this->receive_data_loop();
   });
@@ -100,7 +105,6 @@ void data_module_base::start_all_threads(){
 }
 
 void data_module_base::stop_all_threads(){
-  is_active_  =  false;
   if(receive_data_thread_.joinable()){
     receive_data_thread_.join();
   }

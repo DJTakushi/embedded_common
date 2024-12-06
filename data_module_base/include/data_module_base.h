@@ -4,14 +4,24 @@
 #include "attribute_host.h"
 
 namespace ec{
+
+enum data_module_status{
+  kUninitialized,
+  kConfiguring,
+  kRunning,
+  kExiting,
+  kExited
+};
 class data_module_base : public data_module_i{
  protected:
+  data_module_status status_{kUninitialized};
+  bool is_running();
+
   std::string name_;
   std::string publish_key_;
   attribute_host attribute_host_;
   connection_type connection_type_;
   std::shared_ptr<connection_i> local_conn_;
-  bool is_active_{false};
 
   void config_from_json(nlohmann::json j);
 
@@ -33,6 +43,8 @@ class data_module_base : public data_module_i{
   void setup_local_conn();
   void local_publish(std::string topic, std::string data);
 
+  void start_all_threads();
+  void stop_all_threads();
  public:
   data_module_base(std::string name,
                     std::string pub_key,
@@ -41,9 +53,8 @@ class data_module_base : public data_module_i{
                     std::string address,
                     uint port);
   virtual void setup() = 0;
-  void start_all_threads();
-  void stop_all_threads();
-  virtual void close() = 0;
-  bool is_active();
+  void start_running();
+  virtual void exit() = 0;
+  bool is_exited();
 };
 }//ec
