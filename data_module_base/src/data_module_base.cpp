@@ -14,6 +14,13 @@ data_module_base::data_module_base(std::string name,
   local_conn_ = connection_factory::create(connection_type_,address,port);
   local_conn_->subscriptions_add(sub_key);
 }
+void data_module_base::config_from_json(nlohmann::json j){
+  // load name
+  // load publish key
+  // load sub key
+  // load connection type 
+}
+
 
 void data_module_base::setup_local_conn(){
   local_conn_->initialize();
