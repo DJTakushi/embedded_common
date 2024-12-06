@@ -18,6 +18,10 @@ bool config_handler::extract_name(nlohmann::json j, std::string& name){
   return success;
 }
 
+bool config_handler::local_conn_object_exists(nlohmann::json j){
+  return j.contains("local_conn") && j["local_conn"].is_object();
+}
+
 bool config_handler::extract_local_conf(nlohmann::json j,
                                         nlohmann::json& local_conf){
   bool success = false;
@@ -153,6 +157,85 @@ bool config_handler::extract_sub_keys(nlohmann::json j,
     else{
       std::cerr << "config.local_conn.sub_keys is missing" << std::endl;
     }
+  }
+  return success;
+}
+
+bool config_handler::set_local_conn_type(nlohmann::json& j,
+                                          connection_type type){
+  bool success = false;
+  if(local_conn_object_exists(j)){
+    if(j["local_conn"].contains("type")){
+      if(j["local_conn"]["type"].is_string()){
+        switch (type){
+          case kAzureIot:
+            j["local_conn"]["type"] = AZURE_ROUTES;
+            success = true;
+            break;
+          case kMqtt:
+            j["local_conn"]["type"] = MQTT;
+            success = true;
+            break;
+          default:
+            std::cerr << "set_local_conn_type unknown type : ";
+            std::cerr << type << std::endl;
+        }
+      }
+      else{
+        std::cerr << "type not string"  << std::endl;
+      }
+    }
+    else{
+      std::cerr << "type not found" <<  std::endl;
+    }
+  }
+  else{
+    std::cerr << "unable to extract local conf" << std::endl;
+  }
+  return success;
+}
+
+bool config_handler::set_local_conn_address(nlohmann::json& j,
+                                            std::string address){
+  bool success = false;
+  if(local_conn_object_exists(j)){
+    if(j["local_conn"].contains("address")){
+      if(j["local_conn"]["address"].is_string()){
+        j["local_conn"]["address"] = address;
+        success = true;
+      }
+      else{
+        std::cerr << "address not string"  << std::endl;
+      }
+    }
+    else{
+      std::cerr << "address not found" <<  std::endl;
+    }
+  }
+  else{
+    std::cerr << "unable to extract local conf" << std::endl;
+  }
+  return success;
+}
+
+bool config_handler::set_local_conn_port(nlohmann::json& j, uint port){
+  bool success = false;
+  if(local_conn_object_exists(j)){
+    if(j["local_conn"].contains("port")){
+      if(j["local_conn"]["port"].is_number_integer()){
+        j["local_conn"]["port"] = port;
+        success = true;
+      }
+      else{
+        std::cerr << "port not integer"  << std::endl;
+      }
+    }
+    else{
+      std::cerr << "port not found" <<  std::endl;
+    }
+  }
+  else{
+    std::cerr << "unable to extract local conf" << std::endl;
   }
   return success;
 }
