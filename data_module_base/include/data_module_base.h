@@ -42,6 +42,9 @@ class data_module_base : public data_module_i{
 
   void setup_local_conn();
   void local_publish(std::string topic, std::string data);
+  std::thread process_local_message_thread_;
+  void rec_local_msg(std::string& msg);
+  void process_local_message_loop();
 
   void start_all_threads();
   void stop_all_threads();

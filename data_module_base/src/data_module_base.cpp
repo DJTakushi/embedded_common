@@ -104,6 +104,36 @@ void data_module_base::publish_data(){
     local_publish(publish_key_, j.dump());
   }
 }
+
+void data_module_base::rec_local_msg(std::string& msg){
+  try{
+    nlohmann::json jmsg = nlohmann::json::parse(msg);
+    if(jmsg.contains("msg_type") && jmsg["msg_type"]=="config"){
+      config_from_json(jmsg);
+    }
+    else{
+      std::cout << "unknown msg_type (?)" << std::endl;
+    }
+  }
+  catch (nlohmann::json::exception& e) {
+    std::cerr << "nlohmann::json::exception : " << e.what() << std::endl;
+  }
+}
+
+void data_module_base::process_local_message_loop(){
+  while(is_running()){
+    std::string msg;
+    {
+      /* wait for lock message to be avaialble;
+      lock mutex while poping message*/
+      std::unique_lock lk(local_conn_->mutex);
+      local_conn_->cv.wait(lk, [this] { return this->local_conn_->message_available(); });
+      msg = local_conn_->get_received_message();
+    }
+    rec_local_msg(msg);
+  }
+}
+
 void data_module_base::start_running(){
   state_ = kRunning;
   start_all_threads();
@@ -116,6 +146,10 @@ void data_module_base::start_all_threads(){
   update_data_thread_ = std::thread([this](){
     this->update_data_loop();
   });
+
+  process_local_message_thread_ = std::thread([this](){
+    this->process_local_message_loop();
+  });
 }
 
 void data_module_base::stop_all_threads(){
@@ -124,6 +158,9 @@ void data_module_base::stop_all_threads(){
   }
   if(update_data_thread_.joinable()){
     update_data_thread_.join();
+  }
+  if(process_local_message_thread_.joinable()){
+    process_local_message_thread_.join();
   }
 }
 }//ec
