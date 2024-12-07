@@ -23,7 +23,7 @@ class data_module_base : public data_module_i{
   attribute_host attribute_host_;
   std::shared_ptr<connection_i> local_conn_;
 
-  void config_from_json(nlohmann::json j);
+  virtual void config_from_json(nlohmann::json j);
 
   std::queue<std::shared_ptr<void*>> received_data_; // void for cast-ability
   std::thread receive_data_thread_;

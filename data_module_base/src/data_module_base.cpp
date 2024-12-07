@@ -7,6 +7,7 @@ data_module_base::data_module_base(nlohmann::json config){
 }
 
 void data_module_base::config_from_json(nlohmann::json j){
+  std::cout << "data_module_base::config_from_json()..."<<std::endl;
   bool good_config;
   std::string              tmp_name;
   connection_type          tmp_type;
@@ -23,6 +24,16 @@ void data_module_base::config_from_json(nlohmann::json j){
   good_config &= config_handler::extract_sub_keys(j, tmp_sub_keys);
 
   if(good_config){
+    /** TODO: close necessary components in preparation for */
+    // stop_all_threads();
+    // if(serial_port_!= NULL){
+    //   serial_port_->close();
+    // }
+    // if(local_conn_ != NULL){
+    //   local_conn_->close();
+    // }
+
+
     name_ = tmp_name;
     publish_key_ = tmp_pub_key;
     local_conn_ = connection_factory::create(tmp_type,tmp_address,tmp_port);
