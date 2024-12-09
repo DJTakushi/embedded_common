@@ -5,7 +5,6 @@ namespace ec{
 data_module_base::data_module_base(nlohmann::json config) :
                                                         config_queued_(config){
   state_ = kConfiguring;
-  // state_machine_loop();
 }
 void data_module_base::command_run(){
   run_commanded_=true;
@@ -182,6 +181,7 @@ void data_module_base::rec_local_msg(std::string& msg){
     nlohmann::json jmsg = nlohmann::json::parse(msg);
     if(jmsg.contains("msg_type") && jmsg["msg_type"]=="config"){
       if(is_config_good(jmsg)){
+        /** must configure elsewhere where this thread can be shut down */
         config_queued_ = jmsg;
         state_ = kConfiguring;
       }
