@@ -118,6 +118,7 @@ void connection_mqtt::set_will_topic(std::string topic){
   will_topic_ = topic;
 }
 void connection_mqtt::close(){
+  stop_loop();
   mosquitto_disconnect(mosq_);
 }
 bool connection_mqtt::is_stable(){
