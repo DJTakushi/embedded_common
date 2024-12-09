@@ -256,6 +256,7 @@ void data_module_base::save_generated_config(){
 nlohmann::ordered_json data_module_base::config_gen(){
   nlohmann::ordered_json config;
   config["name"] = name_;
+  config["pub_key"] = publish_key_;
 
   config["local_conn"] = local_conn_->gen_config();
   // // config["hardware"] = 
