@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "data_module_base.h"
 #include "config_handler.h"
 namespace ec{
@@ -77,7 +78,7 @@ bool data_module_base::is_config_good(nlohmann::json j){
   good_config &= config_handler::extract_local_conn_type(j, tmp_type);
   good_config &= config_handler::extract_local_conn_address(j, tmp_address);
   good_config &= config_handler::extract_local_conn_port(j, tmp_port);
-  good_config &= config_handler::extract_local_conn_pub_key(j, tmp_pub_key);
+  good_config &= config_handler::extract_pub_key(j, tmp_pub_key);
   good_config &= config_handler::extract_sub_keys(j, tmp_sub_keys);
   return good_config;
 }
@@ -95,7 +96,7 @@ void data_module_base::config_from_json(nlohmann::json j){
   good_config &= config_handler::extract_local_conn_type(j, tmp_type);
   good_config &= config_handler::extract_local_conn_address(j, tmp_address);
   good_config &= config_handler::extract_local_conn_port(j, tmp_port);
-  good_config &= config_handler::extract_local_conn_pub_key(j, tmp_pub_key);
+  good_config &= config_handler::extract_pub_key(j, tmp_pub_key);
   good_config &= config_handler::extract_sub_keys(j, tmp_sub_keys);
   if(good_config){
     name_ = tmp_name;
@@ -104,6 +105,7 @@ void data_module_base::config_from_json(nlohmann::json j){
     for(auto sub_key : tmp_sub_keys){
       local_conn_->subscriptions_add(sub_key);
     }
+    save_generated_config();
   }
   else{
     std::cerr << "good_config not true!" << std::endl;
@@ -243,6 +245,23 @@ void data_module_base::stop(){
 void data_module_base::exit(){
   stop();
   state_ = ec::data_module_status::kExited;
+}
+void data_module_base::save_generated_config(){
+  nlohmann::json new_config = config_gen();
+  std::ofstream out("generated.json");
+  out << new_config.dump(2);
+  out.close();
+}
+
+nlohmann::ordered_json data_module_base::config_gen(){
+  nlohmann::ordered_json config;
+  config["name"] = name_;
+
+  config["local_conn"] = local_conn_->gen_config();
+  // // config["hardware"] = 
+  // config["parser"] = parser_->gen_config();
+
+  return config;
 }
 
 }//ec

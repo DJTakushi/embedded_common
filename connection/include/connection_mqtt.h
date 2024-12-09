@@ -46,5 +46,6 @@ class connection_mqtt : public connection_base {
   void close();
   void set_will_topic(std::string topic);
   bool is_stable();
+  nlohmann::ordered_json gen_config();
 };
 }//ec

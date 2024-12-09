@@ -111,23 +111,19 @@ bool config_handler::extract_local_conn_port(nlohmann::json j, uint& port){
   }
   return success;
 }
-bool  config_handler::extract_local_conn_pub_key(nlohmann::json j, std::string& pub_key){
+bool  config_handler::extract_pub_key(nlohmann::json j, std::string& pub_key){
   bool success = false;
-  nlohmann::json local_conn;
-  if(extract_local_conf(j, local_conn)){
-    success = false;
-    if(local_conn.contains("pub_key")){
-      if(local_conn["pub_key"].is_string()){
-        pub_key = local_conn["pub_key"];
-        success = true;
-      }
-      else{
-        std::cerr << "config.local_conn.pub_key is not a string"<<std::endl;
-      }
+  if(j.contains("pub_key")){
+    if(j["pub_key"].is_string()){
+      pub_key = j["pub_key"];
+      success = true;
     }
     else{
-      std::cerr << "config.local_conn.pub_key is missing" << std::endl;
+      std::cerr << "config.pub_key is not a string"<<std::endl;
     }
+  }
+  else{
+    std::cerr << "config.pub_key is missing" << std::endl;
   }
   return success;
 }

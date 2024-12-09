@@ -2,6 +2,7 @@
 #include <condition_variable>
 #include <functional>
 #include <string>
+#include "nlohmann/json.hpp"
 
 namespace ec{
 typedef std::function<void(std::string, void*)> message_callback;
@@ -16,6 +17,7 @@ class connection_i {
   virtual void publish(std::string topic, std::string msg) = 0;
   virtual void close() = 0;
   virtual void subscriptions_add(std::string sub) = 0;
+  virtual nlohmann::ordered_json gen_config() = 0;
 
   std::mutex mutex;
   std::condition_variable cv;

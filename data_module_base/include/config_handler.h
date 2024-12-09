@@ -13,7 +13,7 @@ class config_handler{
   static bool extract_local_conn_address(nlohmann::json j,
                                           std::string& address);
   static bool extract_local_conn_port(nlohmann::json j, uint& port);
-  static bool  extract_local_conn_pub_key(nlohmann::json j,
+  static bool  extract_pub_key(nlohmann::json j,
                                           std::string& pub_key);
   static bool extract_sub_keys(nlohmann::json j,
                                 std::vector<std::string>& sub_keys);

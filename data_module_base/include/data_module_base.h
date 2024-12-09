@@ -50,6 +50,9 @@ class data_module_base : public data_module_i{
   nlohmann::json create_update_message();
   void publish_data();
 
+  nlohmann::ordered_json config_gen();
+  void save_generated_config();
+
   void setup_local_conn();
   void local_publish(std::string topic, std::string data);
   std::thread process_local_message_thread_;

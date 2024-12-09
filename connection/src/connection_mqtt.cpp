@@ -124,4 +124,15 @@ void connection_mqtt::close(){
 bool connection_mqtt::is_stable(){
   return stable_;
 }
+nlohmann::ordered_json connection_mqtt::gen_config(){
+  nlohmann::ordered_json config;
+  config["type"] = "MQTT";
+  config["address"] = host_;
+  config["port"] = host_port_;
+
+  config["sub_keys"] = subscriptions_;
+
+  return config;
+}
+
 }//ec

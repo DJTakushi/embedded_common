@@ -141,4 +141,10 @@ void connection_azure_routes::publish(std::string topic, std::string msg){
     std::cerr<<"ERROR: iotHubMessageHandle is NULL!"<<std::endl;
   }
 }
+nlohmann::ordered_json connection_azure_routes::gen_config(){
+  nlohmann::ordered_json config;
+  /** TODO: */
+  return config;
+}
+
 }//ec
