@@ -51,6 +51,7 @@ class data_module_base : public data_module_i{
   void publish_data();
 
   nlohmann::ordered_json config_gen();
+  virtual nlohmann::ordered_json config_hardware_gen() = 0;
   void save_generated_config();
 
   void setup_local_conn();
