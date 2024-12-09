@@ -120,6 +120,7 @@ void data_module_base::rec_local_msg(std::string& msg){
   try{
     nlohmann::json jmsg = nlohmann::json::parse(msg);
     if(jmsg.contains("msg_type") && jmsg["msg_type"]=="config"){
+      /** TODO: check if config is good here before sending to state-manager */
       config_from_json(jmsg);
     }
     else{
