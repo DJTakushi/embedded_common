@@ -247,7 +247,7 @@ void data_module_base::exit(){
   state_ = ec::data_module_status::kExited;
 }
 void data_module_base::save_generated_config(){
-  nlohmann::json new_config = config_gen();
+  nlohmann::ordered_json new_config = config_gen();
   std::ofstream out("generated.json");
   out << new_config.dump(2);
   out.close();
