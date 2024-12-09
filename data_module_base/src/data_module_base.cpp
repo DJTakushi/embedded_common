@@ -25,6 +25,9 @@ void data_module_base::state_machine(){
     case kConfiguring:
       stop();
       config_from_json(config_queued_);
+      config_queued_.clear();
+      save_generated_config();
+      state_ = ec::kConfigured;
       break;
     case kConfigured:
       if(run_commanded_){
@@ -105,7 +108,6 @@ void data_module_base::config_from_json(nlohmann::json j){
     for(auto sub_key : tmp_sub_keys){
       local_conn_->subscriptions_add(sub_key);
     }
-    save_generated_config();
   }
   else{
     std::cerr << "good_config not true!" << std::endl;
@@ -259,7 +261,7 @@ nlohmann::ordered_json data_module_base::config_gen(){
   config["pub_key"] = publish_key_;
 
   config["local_conn"] = local_conn_->gen_config();
-  // // config["hardware"] = 
+  config["hardware"] = config_hardware_gen();
   // config["parser"] = parser_->gen_config();
 
   return config;
