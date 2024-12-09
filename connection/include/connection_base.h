@@ -10,7 +10,7 @@ namespace ec{
 class connection_base : public connection_i {
  protected:
   std::shared_ptr<message_queue> received_queue_;
-  bool active_{false};
+  bool connection_active_{false};
   std::thread do_work_thread_;
   std::list<std::string> subscriptions_;
  public:

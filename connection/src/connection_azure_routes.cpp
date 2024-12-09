@@ -88,9 +88,9 @@ bool connection_azure_routes::initialize(){
 }
 
 void connection_azure_routes::start_loop(){
-  active_=true;
+  connection_active_=true;
   do_work_thread_ = std::thread([this](){
-    while(this->active_){
+    while(this->connection_active_){
       IoTHubModuleClient_LL_DoWork(handle);
       ThreadAPI_Sleep(10);
     }

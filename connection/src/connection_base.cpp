@@ -6,7 +6,7 @@ connection_base::connection_base(size_t max_messages){
 }
 
 void connection_base::stop_loop(){
-  active_ = false;
+  connection_active_ = false;
   if(do_work_thread_.joinable()){
     do_work_thread_.join();
   }

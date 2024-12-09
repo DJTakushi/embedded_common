@@ -90,14 +90,14 @@ void connection_mqtt::service_mqtt(){
   mosquitto_loop(mosq_, 0, 1);
 }
 void connection_mqtt::mosquitto_service_loop(){
-  while(active_){
+  while(connection_active_){
     service_mqtt();
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
   std::cout << "mosquitto_service_loop exiting..."<<std::endl;
 }
 void connection_mqtt::start_loop(){
-  active_=true;
+  connection_active_=true;
   do_work_thread_ = std::thread([this](){
     this->mosquitto_service_loop();
   });
