@@ -2,12 +2,70 @@
 #include "data_module_base.h"
 #include "config_handler.h"
 namespace ec{
-data_module_base::data_module_base(nlohmann::json config){
-  // call configure from derived::config_from_json
+data_module_base::data_module_base(nlohmann::json config) :
+                                                        config_queued_(config){
+  state_ = kConfiguring;
+  // state_machine_loop();
+}
+void data_module_base::command_run(){
+  run_commanded_=true;
+}
+void data_module_base::command_exit(){
+  state_ = kExiting;
+  run_commanded_ = false;
+}
+bool data_module_base::is_exited(){
+  return state_ == kExited;
 }
 
-void data_module_base::config_from_json(nlohmann::json j){
-  std::cout << "data_module_base::config_from_json()..."<<std::endl;
+void data_module_base::state_machine(){
+  switch(state_){
+    case kUninitialized:
+      break;
+    case kConfiguring:
+      stop();
+      config_from_json(config_queued_);
+      break;
+    case kConfigured:
+      if(run_commanded_){
+        state_ = kSettingUp;
+      }
+      break;
+    case kSettingUp:
+      setup();
+      break;
+    case kRunning:
+      break;
+    case kExiting:
+      exit();
+      break;
+    case kExited:
+      /** NOTE: will not hit from state_machine_loop*/
+      break;
+    case kConfigBad:
+      std::cerr << "config is bad ; cannot procede" << std::endl;
+      state_ = kExiting;
+      break;
+    default:
+      std::cerr << "unknown state : " << state_<<std::endl;
+  }
+}
+
+void data_module_base::state_machine_loop(){
+  while(!is_exited()){
+    state_machine();
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  }
+}
+void data_module_base::start_state_machine_loop(){
+  state_machine_thread_ = std::thread([this](){
+    this->state_machine_loop();
+  });
+}
+
+bool data_module_base::is_config_good(nlohmann::json j){
+  /** TODO: refactor this check to more efficiently be repeated in
+   * config_from_json */
   bool good_config;
   std::string              tmp_name;
   connection_type          tmp_type;
@@ -22,18 +80,25 @@ void data_module_base::config_from_json(nlohmann::json j){
   good_config &= config_handler::extract_local_conn_port(j, tmp_port);
   good_config &= config_handler::extract_local_conn_pub_key(j, tmp_pub_key);
   good_config &= config_handler::extract_sub_keys(j, tmp_sub_keys);
+  return good_config;
+}
 
+void data_module_base::config_from_json(nlohmann::json j){
+  bool good_config;
+  std::string              tmp_name;
+  connection_type          tmp_type;
+  std::string              tmp_address;
+  uint                     tmp_port;
+  std::string              tmp_pub_key;
+  std::vector<std::string> tmp_sub_keys;
+
+  good_config = config_handler::extract_name(j,tmp_name);
+  good_config &= config_handler::extract_local_conn_type(j, tmp_type);
+  good_config &= config_handler::extract_local_conn_address(j, tmp_address);
+  good_config &= config_handler::extract_local_conn_port(j, tmp_port);
+  good_config &= config_handler::extract_local_conn_pub_key(j, tmp_pub_key);
+  good_config &= config_handler::extract_sub_keys(j, tmp_sub_keys);
   if(good_config){
-    /** TODO: close necessary components in preparation for */
-    // stop_all_threads();
-    // if(serial_port_!= NULL){
-    //   serial_port_->close();
-    // }
-    // if(local_conn_ != NULL){
-    //   local_conn_->close();
-    // }
-
-
     name_ = tmp_name;
     publish_key_ = tmp_pub_key;
     local_conn_ = connection_factory::create(tmp_type,tmp_address,tmp_port);
@@ -48,7 +113,7 @@ void data_module_base::config_from_json(nlohmann::json j){
 }
 
 bool data_module_base::is_running(){
-  return state_ == kRunning;
+  return state_ == kRunning || state_ == kSettingUp;
 }
 void data_module_base::setup_local_conn(){
   local_conn_->initialize();
@@ -56,10 +121,6 @@ void data_module_base::setup_local_conn(){
 
 void data_module_base::local_publish(std::string topic, std::string data){
   local_conn_->publish(topic,data);
-}
-
-bool data_module_base::is_exited(){
-  return state_ == kExited;
 }
 
 void data_module_base::receive_data_loop(){
@@ -120,8 +181,10 @@ void data_module_base::rec_local_msg(std::string& msg){
   try{
     nlohmann::json jmsg = nlohmann::json::parse(msg);
     if(jmsg.contains("msg_type") && jmsg["msg_type"]=="config"){
-      /** TODO: check if config is good here before sending to state-manager */
-      config_from_json(jmsg);
+      if(is_config_good(jmsg)){
+        config_queued_ = jmsg;
+        state_ = kConfiguring;
+      }
     }
     else{
       std::cout << "unknown msg_type (?)" << std::endl;
@@ -146,10 +209,6 @@ void data_module_base::process_local_message_loop(){
   }
 }
 
-void data_module_base::start_running(){
-  state_ = kRunning;
-  start_all_threads();
-}
 void data_module_base::start_all_threads(){
   receive_data_thread_ = std::thread([this](){
     this->receive_data_loop();
@@ -175,4 +234,15 @@ void data_module_base::stop_all_threads(){
     process_local_message_thread_.join();
   }
 }
+void data_module_base::stop(){
+  stop_all_threads();
+  if(local_conn_.get() != NULL){
+    local_conn_->close();
+  }
+}
+void data_module_base::exit(){
+  stop();
+  state_ = ec::data_module_status::kExited;
+}
+
 }//ec

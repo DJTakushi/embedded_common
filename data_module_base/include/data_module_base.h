@@ -8,6 +8,8 @@ namespace ec{
 enum data_module_status{
   kUninitialized,
   kConfiguring,
+  kConfigured,
+  kSettingUp,
   kRunning,
   kExiting,
   kExited,
@@ -15,14 +17,22 @@ enum data_module_status{
 };
 class data_module_base : public data_module_i{
  protected:
+  nlohmann::json config_queued_;
   data_module_status state_{kUninitialized};
   bool is_running();
+  bool run_commanded_{false};
+
+  void state_machine();
+  std::thread state_machine_thread_;
+  void state_machine_loop();
+  void start_state_machine_loop();
 
   std::string name_;
   std::string publish_key_;
   attribute_host attribute_host_;
   std::shared_ptr<connection_i> local_conn_;
 
+  virtual bool is_config_good(nlohmann::json j);
   virtual void config_from_json(nlohmann::json j);
 
   std::queue<std::shared_ptr<void*>> received_data_; // void for cast-ability
@@ -48,11 +58,14 @@ class data_module_base : public data_module_i{
 
   void start_all_threads();
   void stop_all_threads();
+
+  virtual void setup() = 0;
+  virtual void stop() = 0;
+  void exit();
  public:
   data_module_base(nlohmann::json config);
-  virtual void setup() = 0;
-  void start_running();
-  virtual void exit() = 0;
+  void command_run();
+  void command_exit();
   bool is_exited();
 };
 }//ec
