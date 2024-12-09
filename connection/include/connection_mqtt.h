@@ -15,7 +15,6 @@ class connection_mqtt : public connection_base {
   uint host_keep_alive_{60};
 
   void service_mqtt();
-  std::thread mosquitto_service_loop_thread_;
   void mosquitto_service_loop();
 
   static void connect_callback(struct mosquitto *mosq,
