@@ -1,10 +1,6 @@
 #include <iostream>
 #include "attribute_host.h"
 namespace ec{
-attribute_host::attribute_host(){
-  // TODO :
-}
-
 void attribute_host::update_attribute(nlohmann::json& j, steady_tp time){
   if(j.contains("name") && j.contains("datatype")){
     std::string attr_name = j["name"];
