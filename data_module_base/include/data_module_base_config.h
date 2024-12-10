@@ -11,6 +11,7 @@ struct data_module_base_config{
   uint                     port;
   std::string              pub_key;
   std::vector<std::string> sub_keys;
+  nlohmann::json           parser;
   data_module_base_config(nlohmann::json j);
 
   static bool local_conn_object_exists(nlohmann::json j);
@@ -24,6 +25,7 @@ struct data_module_base_config{
                                 std::string& pub_key);
   static bool extract_sub_keys(nlohmann::json j,
                                 std::vector<std::string>& sub_keys);
+  static bool extract_parser(nlohmann::json j, nlohmann::json& parser);
 
   static bool set_local_conn_type(nlohmann::json& j, connection_type type);
   static bool set_local_conn_address(nlohmann::json& j, std::string address);

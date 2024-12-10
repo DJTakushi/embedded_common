@@ -3,8 +3,6 @@
 
 namespace ec{
 data_module_base_config::data_module_base_config(nlohmann::json j){
-  // TODO : check that parser exists;
-  // TODO : configure in base class
   good = true;
   good = extract_name(j,name);
   good &= extract_local_conn_type(j, type);
@@ -12,6 +10,7 @@ data_module_base_config::data_module_base_config(nlohmann::json j){
   good &= extract_local_conn_port(j, port);
   good &= extract_pub_key(j, pub_key);
   good &= extract_sub_keys(j, sub_keys);
+  good &= extract_parser(j,parser);
 }
 
 bool data_module_base_config::extract_name(nlohmann::json j, std::string& name){
@@ -166,6 +165,15 @@ bool data_module_base_config::extract_sub_keys(nlohmann::json j,
     else{
       std::cerr << "config.local_conn.sub_keys is missing" << std::endl;
     }
+  }
+  return success;
+}
+bool data_module_base_config::extract_parser(nlohmann::json j,
+                                              nlohmann::json& parser){
+  bool success = false;
+  if(j.contains("parser") && j["parser"].is_object()){
+    parser = j["parser"];
+    success = true;
   }
   return success;
 }

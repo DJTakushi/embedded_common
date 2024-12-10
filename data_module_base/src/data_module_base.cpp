@@ -78,7 +78,7 @@ void data_module_base::config_from_json(nlohmann::json j){
     name_ = cfg.name;
     publish_key_ = cfg.pub_key;
     local_conn_ = connection_factory::create(cfg.type,cfg.address,cfg.port);
-    parser_->configure(j["parser"]);
+    parser_->configure(cfg.parser);
 
     nlohmann::json parser_attributes = parser_->get_all_supported_attributes();
     attribute_host_.update_attributes_from_array(parser_attributes);
