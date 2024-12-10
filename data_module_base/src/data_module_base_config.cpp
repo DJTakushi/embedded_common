@@ -3,6 +3,8 @@
 
 namespace ec{
 data_module_base_config::data_module_base_config(nlohmann::json j){
+    // TODO : check that parser exists;
+    // TODO : configure in base class
   bool good_tmp{true};
   good_tmp = extract_name(j,name);
   good_tmp &= extract_local_conn_type(j, type);
