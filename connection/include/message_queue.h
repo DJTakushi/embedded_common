@@ -6,7 +6,7 @@
 
 namespace ec{
 class message_queue {
-  std::queue<std::string> messages_; // TODO: queue-type should be null-ptrs for can_ids
+  std::queue<std::string> messages_;
   std::mutex message_mutex;
   size_t max_messages_;
  public:
