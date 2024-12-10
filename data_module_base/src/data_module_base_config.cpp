@@ -5,9 +5,9 @@ namespace ec{
 data_module_base_config::data_module_base_config(nlohmann::json j){
   good = true;
   good = extract_name(j,name);
-  good &= extract_local_conn_type(j, type);
-  good &= extract_local_conn_address(j, address);
-  good &= extract_local_conn_port(j, port);
+  good &= extract_local_conn_type(j, local_connection_type);
+  good &= extract_local_conn_address(j, local_connection_address);
+  good &= extract_local_conn_port(j, local_connection_port);
   good &= extract_pub_key(j, pub_key);
   good &= extract_sub_keys(j, sub_keys);
   good &= extract_parser(j,parser);

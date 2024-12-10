@@ -6,9 +6,9 @@ namespace ec{
 struct data_module_base_config{
   bool good{false};
   std::string              name;
-  connection_type          type;
-  std::string              address;
-  uint                     port;
+  connection_type          local_connection_type;
+  std::string              local_connection_address;
+  uint                     local_connection_port;
   std::string              pub_key;
   std::vector<std::string> sub_keys;
   nlohmann::json           parser;
