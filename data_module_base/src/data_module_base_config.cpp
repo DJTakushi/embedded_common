@@ -3,16 +3,15 @@
 
 namespace ec{
 data_module_base_config::data_module_base_config(nlohmann::json j){
-    // TODO : check that parser exists;
-    // TODO : configure in base class
-  bool good_tmp{true};
-  good_tmp = extract_name(j,name);
-  good_tmp &= extract_local_conn_type(j, type);
-  good_tmp &= extract_local_conn_address(j, address);
-  good_tmp &= extract_local_conn_port(j, port);
-  good_tmp &= extract_pub_key(j, pub_key);
-  good_tmp &= extract_sub_keys(j, sub_keys);
-  good = good_tmp;
+  // TODO : check that parser exists;
+  // TODO : configure in base class
+  good = true;
+  good = extract_name(j,name);
+  good &= extract_local_conn_type(j, type);
+  good &= extract_local_conn_address(j, address);
+  good &= extract_local_conn_port(j, port);
+  good &= extract_pub_key(j, pub_key);
+  good &= extract_sub_keys(j, sub_keys);
 }
 
 bool data_module_base_config::extract_name(nlohmann::json j, std::string& name){
