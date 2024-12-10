@@ -11,11 +11,9 @@ void attribute_host::update_attribute(nlohmann::json& j, steady_tp time){
                                                             attr_datatype);
     }
     else{
-      // do nothing?
+      // do nothing; attribute already exists
     }
 
-    /** TODO : should timestamp be updated if it is included?
-    assume all should be updated (for now[!])  */
     if(j.contains("value") && j.contains("timestamp")){
       if(j["timestamp"] != attributes_[attr_name]->reported_epoch_get()){
         attributes_[attr_name]->set_value_with_timetamp(j["value"],time);
