@@ -78,6 +78,10 @@ void data_module_base::config_from_json(nlohmann::json j){
     name_ = cfg.name;
     publish_key_ = cfg.pub_key;
     local_conn_ = connection_factory::create(cfg.type,cfg.address,cfg.port);
+
+    nlohmann::json parser_attributes = parser_->get_all_supported_attributes();
+    attribute_host_.update_attributes_from_array(parser_attributes);
+
     for(auto sub_key : cfg.sub_keys){
       local_conn_->subscriptions_add(sub_key);
     }
