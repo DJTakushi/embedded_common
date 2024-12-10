@@ -31,10 +31,10 @@ void data_module_base::state_machine(){
       break;
     case kConfigured:
       if(run_commanded_){
-        state_ = kSettingUp;
+        state_ = kStarting;
       }
       break;
-    case kSettingUp:
+    case kStarting:
       setup();
       break;
     case kRunning:
@@ -116,7 +116,7 @@ void data_module_base::config_from_json(nlohmann::json j){
 }
 
 bool data_module_base::is_running(){
-  return state_ == kRunning || state_ == kSettingUp;
+  return state_ == kRunning || state_ == kStarting;
 }
 void data_module_base::setup_local_conn(){
   local_conn_->initialize();

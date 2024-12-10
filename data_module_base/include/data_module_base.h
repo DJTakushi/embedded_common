@@ -9,7 +9,7 @@ enum data_module_status{
   kUninitialized,
   kConfiguring,
   kConfigured,
-  kSettingUp,
+  kStarting,
   kRunning,
   kExiting,
   kExited,
