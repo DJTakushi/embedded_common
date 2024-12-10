@@ -11,6 +11,6 @@ class parser_i{
 
   virtual nlohmann::json get_all_supported_attributes() = 0;
 
-  virtual nlohmann::json get_config() = 0;
+  virtual nlohmann::ordered_json get_config() = 0;
 };
 }//ec
