@@ -1,7 +1,19 @@
 #include <iostream>
-#include "config_handler.h"
+#include "data_module_base_config.h"
+
 namespace ec{
-bool config_handler::extract_name(nlohmann::json j, std::string& name){
+data_module_base_config::data_module_base_config(nlohmann::json j){
+  bool good_tmp{true};
+  good_tmp = extract_name(j,name);
+  good_tmp &= extract_local_conn_type(j, type);
+  good_tmp &= extract_local_conn_address(j, address);
+  good_tmp &= extract_local_conn_port(j, port);
+  good_tmp &= extract_pub_key(j, pub_key);
+  good_tmp &= extract_sub_keys(j, sub_keys);
+  good = good_tmp;
+}
+
+bool data_module_base_config::extract_name(nlohmann::json j, std::string& name){
   bool success = false;
   if(j.contains("name")){
     if(j["name"].is_string()){
@@ -18,11 +30,11 @@ bool config_handler::extract_name(nlohmann::json j, std::string& name){
   return success;
 }
 
-bool config_handler::local_conn_object_exists(nlohmann::json j){
+bool data_module_base_config::local_conn_object_exists(nlohmann::json j){
   return j.contains("local_conn") && j["local_conn"].is_object();
 }
 
-bool config_handler::extract_local_conf(nlohmann::json j,
+bool data_module_base_config::extract_local_conf(nlohmann::json j,
                                         nlohmann::json& local_conf){
   bool success = false;
   if(j.contains("local_conn")){
@@ -40,7 +52,7 @@ bool config_handler::extract_local_conf(nlohmann::json j,
   return success;
 }
 
-bool config_handler::extract_local_conn_type(nlohmann::json j, connection_type& type){
+bool data_module_base_config::extract_local_conn_type(nlohmann::json j, connection_type& type){
   bool success = false;
   nlohmann::json local_conn;
   if(extract_local_conf(j, local_conn)){
@@ -71,7 +83,7 @@ bool config_handler::extract_local_conn_type(nlohmann::json j, connection_type& 
 }
 
 
-bool config_handler::extract_local_conn_address(nlohmann::json j, std::string& address){
+bool data_module_base_config::extract_local_conn_address(nlohmann::json j, std::string& address){
   bool success = false;
   nlohmann::json local_conn;
   if(extract_local_conf(j, local_conn)){
@@ -91,7 +103,7 @@ bool config_handler::extract_local_conn_address(nlohmann::json j, std::string& a
   }
   return success;
 }
-bool config_handler::extract_local_conn_port(nlohmann::json j, uint& port){
+bool data_module_base_config::extract_local_conn_port(nlohmann::json j, uint& port){
   bool success = false;
   nlohmann::json local_conn;
   if(extract_local_conf(j, local_conn)){
@@ -111,7 +123,7 @@ bool config_handler::extract_local_conn_port(nlohmann::json j, uint& port){
   }
   return success;
 }
-bool  config_handler::extract_pub_key(nlohmann::json j, std::string& pub_key){
+bool  data_module_base_config::extract_pub_key(nlohmann::json j, std::string& pub_key){
   bool success = false;
   if(j.contains("pub_key")){
     if(j["pub_key"].is_string()){
@@ -127,7 +139,7 @@ bool  config_handler::extract_pub_key(nlohmann::json j, std::string& pub_key){
   }
   return success;
 }
-bool config_handler::extract_sub_keys(nlohmann::json j,
+bool data_module_base_config::extract_sub_keys(nlohmann::json j,
                                       std::vector<std::string>& sub_keys){
   bool success = false;
   nlohmann::json local_conn;
@@ -157,7 +169,7 @@ bool config_handler::extract_sub_keys(nlohmann::json j,
   return success;
 }
 
-bool config_handler::set_local_conn_type(nlohmann::json& j,
+bool data_module_base_config::set_local_conn_type(nlohmann::json& j,
                                           connection_type type){
   bool success = false;
   if(local_conn_object_exists(j)){
@@ -191,7 +203,7 @@ bool config_handler::set_local_conn_type(nlohmann::json& j,
   return success;
 }
 
-bool config_handler::set_local_conn_address(nlohmann::json& j,
+bool data_module_base_config::set_local_conn_address(nlohmann::json& j,
                                             std::string address){
   bool success = false;
   if(local_conn_object_exists(j)){
@@ -214,7 +226,7 @@ bool config_handler::set_local_conn_address(nlohmann::json& j,
   return success;
 }
 
-bool config_handler::set_local_conn_port(nlohmann::json& j, uint port){
+bool data_module_base_config::set_local_conn_port(nlohmann::json& j, uint port){
   bool success = false;
   if(local_conn_object_exists(j)){
     if(j["local_conn"].contains("port")){

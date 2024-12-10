@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include "data_module_base_config.h"
 #include "data_module_base.h"
-#include "config_handler.h"
 namespace ec{
 data_module_base::data_module_base(nlohmann::json config) :
                                                         config_queued_(config){
@@ -67,50 +67,23 @@ void data_module_base::start_state_machine_loop(){
 }
 
 bool data_module_base::is_config_good(nlohmann::json j){
-  /** TODO: refactor this check to more efficiently be repeated in
-   * config_from_json */
-  bool good_config;
-  std::string              tmp_name;
-  connection_type          tmp_type;
-  std::string              tmp_address;
-  uint                     tmp_port;
-  std::string              tmp_pub_key;
-  std::vector<std::string> tmp_sub_keys;
-
-  good_config = config_handler::extract_name(j,tmp_name);
-  good_config &= config_handler::extract_local_conn_type(j, tmp_type);
-  good_config &= config_handler::extract_local_conn_address(j, tmp_address);
-  good_config &= config_handler::extract_local_conn_port(j, tmp_port);
-  good_config &= config_handler::extract_pub_key(j, tmp_pub_key);
-  good_config &= config_handler::extract_sub_keys(j, tmp_sub_keys);
-  return good_config;
+  data_module_base_config cfg = data_module_base_config(j);
+  return cfg.good;
 }
 
 void data_module_base::config_from_json(nlohmann::json j){
-  bool good_config;
-  std::string              tmp_name;
-  connection_type          tmp_type;
-  std::string              tmp_address;
-  uint                     tmp_port;
-  std::string              tmp_pub_key;
-  std::vector<std::string> tmp_sub_keys;
+  data_module_base_config cfg = data_module_base_config(j);
 
-  good_config = config_handler::extract_name(j,tmp_name);
-  good_config &= config_handler::extract_local_conn_type(j, tmp_type);
-  good_config &= config_handler::extract_local_conn_address(j, tmp_address);
-  good_config &= config_handler::extract_local_conn_port(j, tmp_port);
-  good_config &= config_handler::extract_pub_key(j, tmp_pub_key);
-  good_config &= config_handler::extract_sub_keys(j, tmp_sub_keys);
-  if(good_config){
-    name_ = tmp_name;
-    publish_key_ = tmp_pub_key;
-    local_conn_ = connection_factory::create(tmp_type,tmp_address,tmp_port);
-    for(auto sub_key : tmp_sub_keys){
+  if(cfg.good){
+    name_ = cfg.name;
+    publish_key_ = cfg.pub_key;
+    local_conn_ = connection_factory::create(cfg.type,cfg.address,cfg.port);
+    for(auto sub_key : cfg.sub_keys){
       local_conn_->subscriptions_add(sub_key);
     }
   }
   else{
-    std::cerr << "good_config not true!" << std::endl;
+    std::cerr << "config not good!" << std::endl;
     state_ = kConfigBad;
   }
 }
