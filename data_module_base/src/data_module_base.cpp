@@ -35,7 +35,7 @@ void data_module_base::state_machine(){
       }
       break;
     case kStarting:
-      setup();
+      start();
       break;
     case kRunning:
       break;

@@ -63,7 +63,7 @@ class data_module_base : public data_module_i{
   void start_all_threads();
   void stop_all_threads();
 
-  virtual void setup() = 0;
+  virtual void start() = 0;
   virtual void stop() = 0;
   void exit();
  public:
