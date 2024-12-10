@@ -262,7 +262,7 @@ nlohmann::ordered_json data_module_base::config_gen(){
 
   config["local_conn"] = local_conn_->gen_config();
   config["hardware"] = config_hardware_gen();
-  // config["parser"] = parser_->gen_config();
+  config["parser"] = parser_->get_config();
 
   return config;
 }
